@@ -1,0 +1,30 @@
+import mongoose from "mongoose";
+
+const UserSchema = new mongoose.Schema({
+    username:{
+        type:String,
+        required:[true,"Username is required"],
+        trim:true
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true,
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email'],
+        trim:true
+    },
+    password:{
+        type:String,
+        required:[true,"Password is required"],
+        select:false,
+        minlength:[6,"Password must be atleast 6 characters long"]
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    }
+});
+
+//used optional chaining operator for resolving undefined user model error
+const User=mongoose.models?.User || mongoose.model('User',UserSchema);
+export default User;
