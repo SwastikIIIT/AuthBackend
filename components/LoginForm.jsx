@@ -21,7 +21,9 @@ const LoginForm=() => {
       if(result?.success)
       {
          toast.success(result.message,{id:toastID});
-         toast.dismiss(toastID);
+         setTimeout(()=>{
+           toast.dismiss(toastID);
+         },1000)
          router.push("/");
       }
       else
