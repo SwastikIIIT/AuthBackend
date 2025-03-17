@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth, signIn } from "@/auth";
 import { handleSignup } from "@/helper/handleSignup";
 import { handleAuth } from "@/helper/handleAuth";
 import { toast } from "sonner";
@@ -13,13 +11,21 @@ import { toast } from "sonner";
 const SignupForm=()=>{
 
    const signup=async(formData)=>{
+    const toastID=toast.loading("Signing up...");
       try{
-             await handleSignup(formData);
+             const result=await handleSignup(formData);
+             if(result.ok==="success")
+              toast.success(result.message,{id:toastID});
       }
       catch(err)
       {
         if(err.message!=="NEXT_REDIRECT")
-        toast.error(err.message);
+        toast.error(err.message,{id:toastID});
+      }
+      finally{
+        setTimeout(()=>{
+        toast.dismiss(toastID);
+        },500)
       }
   }
 
@@ -37,15 +43,14 @@ const SignupForm=()=>{
     return (
     <div className="flex flex-col gap-6">
     <form action={signup}>
-      <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex flex-col items-center gap-2 text-center mb-4">
         <h1 className="text-2xl font-bold text-orange-400">Signup your account</h1>
-        <p className="text-muted-foreground text-sm text-balance">
+        {/* <p className="text-muted-foreground text-sm text-balance">
           Enter the details below to signup to your account
-        </p>
+        </p> */}
       </div>
 
       <div className="grid gap-6">
-        
         <div className="grid gap-3">
           <Label htmlFor="username">Username</Label>
           <Input name="username" type="text" placeholder="Vasu Dixit"  />
@@ -66,7 +71,7 @@ const SignupForm=()=>{
         </div>
 
         <Button type="submit" className="w-full bg-amber-500">
-          Sign Up
+          Create Account
         </Button>
         
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

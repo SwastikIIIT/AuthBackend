@@ -17,7 +17,7 @@ export const handleLogin=async(formData)=>{
         try
         {
           
-          const result=await signIn("credentials", {
+          await signIn("credentials", {
           email: email,
           password: password,
           redirect: false

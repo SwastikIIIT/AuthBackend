@@ -80,7 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //     return false;
   //   },
     // session({ session, user }) {
-    //   session.user.id = user.id
+    //   session.user.id = session.user.id
     //   return session
     // },
   }

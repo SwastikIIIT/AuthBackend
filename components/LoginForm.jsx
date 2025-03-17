@@ -55,13 +55,13 @@ const LoginForm=() => {
     <div className="flex flex-col gap-6">
       
       <form action={handleCredentialLogin}>
-      <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex flex-col items-center gap-2 text-center mb-4">
         <h1 className="text-2xl font-bold text-orange-400">
           Login to your account
         </h1>
-        <p className="text-muted-foreground text-sm text-balance">
+        {/* <p className="text-muted-foreground text-sm text-balance">
           Enter your email below to login to your account
-        </p>
+        </p> */}
       </div>
 
       <div className="grid gap-6">

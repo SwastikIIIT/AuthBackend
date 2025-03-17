@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import { handleSignout } from '@/helper/handlesignout'
+import { handleSignout } from '@/helper/handleSignout'
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';

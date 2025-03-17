@@ -32,7 +32,7 @@ export const handleSignup=async(formData)=>{
           email:email,
           password:hashedPassword
         });
-        
+        return {ok:"success",message:"Account created successfully :)"};
         redirect("/login");
       }
   }
