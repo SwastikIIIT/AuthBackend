@@ -14,8 +14,17 @@ const SignupForm=()=>{
     const toastID=toast.loading("Signing up...");
       try{
              const result=await handleSignup(formData);
+
              if(result.ok==="success")
-              toast.success(result.message,{id:toastID});
+             toast.success(result.message,{
+              id:toastID,
+              description: "Your account has been successfully created. Welcome!",
+              cancel: {
+                  label: "Later",
+                  onClick: () => toast.dismiss()
+                }
+              }
+        );
       }
       catch(err)
       {
@@ -65,7 +74,7 @@ const SignupForm=()=>{
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            {/* <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a> */}
+             <Link href="/forgot-password" className="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</Link> 
           </div>
           <Input name="password" type="password" required/>
         </div>

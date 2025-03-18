@@ -35,13 +35,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const user=await User.findOne({email: email}).select('+password');
         console.log("User found:", user);
         if(!user)
-            throw new CredentialsSignin({cause:"aisa user database me nahi hai"});
+            throw new CredentialsSignin({cause:"User not found in database"});
          
         const isMatch=await compare(password,user.password);
         console.log("Password match:", isMatch);
         
         if(!isMatch)
-           throw new CredentialsSignin({cause:"password galat hai"});
+           throw new CredentialsSignin({cause:"Invalid Password"});
 
         return user;
       } 

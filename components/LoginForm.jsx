@@ -15,27 +15,34 @@ const LoginForm=() => {
   const router=useRouter();
 
   const handleCredentialLogin=async(formData)=>{
-    const toastID=toast.loading("Logging in...");
+    const toastID = toast.loading("Logging in...", {
+      description: "Verifying your credentials",
+      });
+   
     try{
       const result=await handleLogin(formData);
-      if(result?.success)
-      {
-         toast.success(result.message,{id:toastID});
-         setTimeout(()=>{
-           toast.dismiss(toastID);
-         },1000)
-         router.push("/");
-      }
-      else
-      {
-        toast.error(result,{id:toastID});
-      }
-     
+    
+        if(result?.success)
+        {
+
+            toast.success(result.message,{
+              id:toastID,
+              description: "Welcome back! You've been securely logged in.",
+             });
+            router.push("/");
+        }
+        else
+        toast.error("Login failed",{id:toastID,description:result});
     }
     catch(err)
     {
       if(err.message!=="NEXT_REDIRECT")
       toast.error(err.message,{id:toastID});
+    }
+    finally{
+      setTimeout(()=>{
+        toast.dismiss(toastID);
+      },1000)
     }
   }
   
@@ -48,8 +55,6 @@ const LoginForm=() => {
       toast.error(err.message);
     }
   }
-
-
 
   return (
     <div className="flex flex-col gap-6">
@@ -75,8 +80,10 @@ const LoginForm=() => {
         </div>
 
         <div className="grid gap-3">
-           <Label htmlFor="password">Password</Label>
-            {/* <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a> */} 
+           <div className="flex items-center">
+             <Label htmlFor="password">Password</Label>
+             <Link href="/forgot-password" className="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</Link> 
+           </div>
             <Input name="password" type="password" required />
         </div>
 
