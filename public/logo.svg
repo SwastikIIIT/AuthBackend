@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Dark Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="#121212" />
+  
+  <!-- Outer Glow -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="#9333EA" stroke-width="2" opacity="0.6" />
+  
+  <!-- Inner Purple Circle with Gradient -->
+  <circle cx="100" cy="100" r="75" fill="url(#purpleGradient)" />
+  
+  <!-- Lock Shape -->
+  <path d="M100 60 C83 60, 70 73, 70 90 L70 110 L130 110 L130 90 C130 73, 117 60, 100 60 Z" fill="none" stroke="#E9D5FF" stroke-width="6" opacity="0.9" />
+  
+  <!-- Lock Body -->
+  <rect x="70" y="95" width="60" height="45" rx="5" ry="5" fill="#E9D5FF" opacity="0.9" />
+  
+  <!-- Keyhole -->
+  <circle cx="100" cy="110" r="8" fill="#121212" />
+  <rect x="97" y="110" width="6" height="14" rx="2" ry="2" fill="#121212" />
+  
+  <!-- Grid Lines for Tech Feel -->
+  <line x1="70" y1="130" x2="130" y2="130" stroke="#9333EA" stroke-width="1" opacity="0.7" />
+  <line x1="70" y1="120" x2="130" y2="120" stroke="#9333EA" stroke-width="1" opacity="0.7" />
+  
+  <!-- Decorative Circuit Lines -->
+  <path d="M50 100 L65 100" stroke="#9333EA" stroke-width="2" />
+  <path d="M135 100 L150 100" stroke="#9333EA" stroke-width="2" />
+  <path d="M100 150 L100 160" stroke="#9333EA" stroke-width="2" />
+  
+  <!-- Circuit Dots -->
+  <circle cx="50" cy="100" r="3" fill="#E9D5FF" />
+  <circle cx="150" cy="100" r="3" fill="#E9D5FF" />
+  <circle cx="100" cy="160" r="3" fill="#E9D5FF" />
+
+  <!-- Small Glows -->
+  <circle cx="50" cy="100" r="5" fill="#9333EA" opacity="0.4" />
+  <circle cx="150" cy="100" r="5" fill="#9333EA" opacity="0.4" />
+  
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7E22CE" />
+      <stop offset="100%" stop-color="#4C1D95" />
+    </linearGradient>
+  </defs>
+</svg>

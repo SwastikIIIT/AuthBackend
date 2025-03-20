@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <!-- Dark background -->
+  <rect width="800" height="800" fill="#09090b"/>
+  
+  <!-- Background glow effects -->
+  <circle cx="400" cy="150" r="220" fill="#7e22ce" opacity="0.15" filter="blur(80px)"/>
+  <circle cx="600" cy="400" r="200" fill="#9333ea" opacity="0.1" filter="blur(70px)"/>
+  <circle cx="200" cy="600" r="230" fill="#6b21a8" opacity="0.12" filter="blur(75px)"/>
+  
+  <!-- Top light effect (lamp effect) -->
+  <ellipse cx="400" cy="0" rx="200" ry="100" fill="#9333ea" opacity="0.3" filter="blur(60px)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.07">
+    <!-- Horizontal lines -->
+    <path d="M0 80 L800 80" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 160 L800 160" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 240 L800 240" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 320 L800 320" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 400 L800 400" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 480 L800 480" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 560 L800 560" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 640 L800 640" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 720 L800 720" stroke="#a855f7" stroke-width="0.5"/>
+    
+    <!-- Vertical lines -->
+    <path d="M80 0 L80 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M160 0 L160 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M240 0 L240 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M320 0 L320 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M400 0 L400 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M480 0 L480 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M560 0 L560 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M640 0 L640 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M720 0 L720 800" stroke="#a855f7" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Left gradient cone -->
+  <path d="M0 200 L300 400 L0 600 Z" fill="url(#leftGradient)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="leftGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9333ea;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Right gradient cone -->
+  <path d="M800 200 L500 400 L800 600 Z" fill="url(#rightGradient)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="rightGradient" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#9333ea;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Central elements -->
+  <g>
+    <!-- Center glow -->
+    <circle cx="400" cy="400" r="180" fill="#9333ea" opacity="0.25" filter="blur(50px)"/>
+    
+    <!-- Central decorative elements -->
+    <circle cx="400" cy="400" r="120" fill="none" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
+    <circle cx="400" cy="400" r="100" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.5"/>
+    <circle cx="400" cy="400" r="80" fill="none" stroke="#d8b4fe" stroke-width="1" opacity="0.6"/>
+    
+    <!-- Post Pilot document icon -->
+    <rect x="350" y="340" width="100" height="120" rx="5" ry="5" fill="none" stroke="#d8b4fe" stroke-width="3" opacity="0.9"/>
+    <line x1="370" y1="370" x2="430" y2="370" stroke="#d8b4fe" stroke-width="2" opacity="0.7"/>
+    <line x1="370" y1="390" x2="430" y2="390" stroke="#d8b4fe" stroke-width="2" opacity="0.7"/>
+    <line x1="370" y1="410" x2="430" y2="410" stroke="#d8b4fe" stroke-width="2" opacity="0.7"/>
+    <line x1="370" y1="430" x2="400" y2="430" stroke="#d8b4fe" stroke-width="2" opacity="0.7"/>
+  </g>
+  
+  <!-- Decorative corner elements -->
+  <circle cx="200" cy="200" r="5" fill="#a855f7" opacity="0.7"/>
+  <circle cx="600" cy="600" r="5" fill="#a855f7" opacity="0.7"/>
+  <circle cx="600" cy="200" r="5" fill="#a855f7" opacity="0.7"/>
+  <circle cx="200" cy="600" r="5" fill="#a855f7" opacity="0.7"/>
+  
+  <!-- Pulse animation effect -->
+  <circle cx="400" cy="400" r="200" fill="none" stroke="#9333ea" stroke-width="2" opacity="0.2">
+    <animate attributeName="r" from="200" to="240" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="0.2" to="0" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="400" cy="400" r="180" fill="none" stroke="#9333ea" stroke-width="1" opacity="0.15">
+    <animate attributeName="r" from="180" to="220" dur="6s" begin="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="0.15" to="0" dur="6s" begin="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Subtle connection lines -->
+  <line x1="200" y1="200" x2="350" y2="350" stroke="#a855f7" stroke-width="1" opacity="0.15"/>
+  <line x1="600" y1="600" x2="450" y2="450" stroke="#a855f7" stroke-width="1" opacity="0.15"/>
+  <line x1="600" y1="200" x2="450" y2="350" stroke="#a855f7" stroke-width="1" opacity="0.15"/>
+  <line x1="200" y1="600" x2="350" y2="450" stroke="#a855f7" stroke-width="1" opacity="0.15"/>
+</svg>

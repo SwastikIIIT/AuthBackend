@@ -119,6 +119,14 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+.glass-card-dark {
+  background: rgba(255, 255, 255, 0.05); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Blur effect */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Light border */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -127,4 +135,3 @@
     @apply bg-background text-foreground;
   }
 }
-

@@ -19,6 +19,14 @@ const UserSchema = new mongoose.Schema({
         select:false,
         minlength:[6,"Password must be atleast 6 characters long"]
     },
+    twoFactorEnabled:{
+        type:Boolean,
+        default:false
+    },
+    twoFactorSecret:{
+        type:String,
+        default:null
+    },
     createdAt:{
         type:Date,
         default:Date.now

@@ -6,12 +6,12 @@ import { cookies } from "next/headers";
 export const handleSession=async()=>{
   try{
     const session=await auth();
-    console.log(session?.user);
-    return session?.user;
+    // console.log(session?.user);
+    return session;
   }
   catch(e)
   {
-    console.log('Error in fetchin user session');
+    console.log('Error in fetching user session');
   }
 }
 

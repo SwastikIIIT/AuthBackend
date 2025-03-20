@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <!-- Dark background -->
+  <rect width="800" height="800" fill="#0f0f0f"/>
+  
+  <!-- Background glow effects -->
+  <circle cx="400" cy="150" r="200" fill="#6b21a8" opacity="0.1" filter="blur(60px)"/>
+  <circle cx="600" cy="400" r="180" fill="#7928ca" opacity="0.07" filter="blur(50px)"/>
+  <circle cx="200" cy="600" r="210" fill="#4c1d95" opacity="0.08" filter="blur(55px)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.15">
+    <path d="M0 80 L800 80" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 160 L800 160" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 240 L800 240" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 320 L800 320" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 400 L800 400" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 480 L800 480" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 560 L800 560" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 640 L800 640" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M0 720 L800 720" stroke="#a855f7" stroke-width="0.5"/>
+    
+    <path d="M80 0 L80 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M160 0 L160 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M240 0 L240 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M320 0 L320 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M400 0 L400 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M480 0 L480 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M560 0 L560 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M640 0 L640 800" stroke="#a855f7" stroke-width="0.5"/>
+    <path d="M720 0 L720 800" stroke="#a855f7" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Central element -->
+  <g>
+    <!-- Outer glow ring -->
+    <circle cx="400" cy="400" r="180" fill="#7928ca" opacity="0.2" filter="blur(40px)"/>
+    
+    <!-- Main circles -->
+    <circle cx="400" cy="400" r="120" fill="#0f0f0f" stroke="#a855f7" stroke-width="2" opacity="0.9"/>
+    <circle cx="400" cy="400" r="100" fill="none" stroke="#c084fc" stroke-width="3" opacity="0.7"/>
+    <circle cx="400" cy="400" r="80" fill="none" stroke="#a855f7" stroke-width="1" opacity="0.5"/>
+    
+    <!-- Lock icon -->
+    <rect x="370" y="370" width="60" height="80" rx="30" ry="30" fill="none" stroke="#d8b4fe" stroke-width="4"/>
+    <rect x="380" y="350" width="40" height="30" rx="15" ry="15" fill="none" stroke="#d8b4fe" stroke-width="4"/>
+    <circle cx="400" cy="410" r="10" fill="#d8b4fe"/>
+    <rect x="395" y="410" width="10" height="20" fill="#d8b4fe"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="150" cy="150" r="20" fill="none" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+  <circle cx="650" cy="650" r="20" fill="none" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+  <circle cx="650" cy="150" r="10" fill="#a855f7" opacity="0.4"/>
+  <circle cx="150" cy="650" r="10" fill="#a855f7" opacity="0.4"/>
+  
+  <!-- Pulse effect -->
+  <circle cx="400" cy="400" r="200" fill="none" stroke="#a855f7" stroke-width="3" opacity="0.2">
+    <animate attributeName="r" from="200" to="250" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="0.2" to="0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Lines connecting elements -->
+  <path d="M150 150 L370 370" stroke="#a855f7" stroke-width="1" opacity="0.2"/>
+  <path d="M650 650 L430 430" stroke="#a855f7" stroke-width="1" opacity="0.2"/>
+  <path d="M650 150 L430 370" stroke="#a855f7" stroke-width="1" opacity="0.2"/>
+  <path d="M150 650 L370 430" stroke="#a855f7" stroke-width="1" opacity="0.2"/>
+</svg>

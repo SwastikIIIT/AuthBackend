@@ -1,8 +1,9 @@
 'use server';
-import User from '../models/User'
+
 import { hash } from "bcryptjs";
 import { redirect } from "next/navigation";
 import { connectToMongo } from "@/utils/databse";
+import User from "@/models/User";
 
 export const handleSignup=async(formData)=>{
 
