@@ -13,11 +13,7 @@ import uploadImage from "@/helper/eventHandler/uploadImage";
 
 const SettingPage = () => {
     const {data:session} = useSession();
-    const [twoFactorField,setTwoFactorField]=useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
-    const fileInputRef = useRef(null);
-    console.log("Session of settings", session);
+    const [userData,setUserData]=useState('');
     
     useEffect(()=>{
         const fetchUser=async()=>{
@@ -28,8 +24,7 @@ const SettingPage = () => {
                 if(result.success)
                 {
                     toast.success("Loading successful",{id:toastID,description:result.message});
-                    if(result?.userData?.twoFactorEnabled)
-                    setTwoFactorField(true);
+                    setUserData(result.userData);
                 }
                 else{
                     toast.error("Loading unsuccessful",{id:toastID,description:result.message});
@@ -49,50 +44,6 @@ const SettingPage = () => {
         fetchUser();
     },[session])
 
-    const handleImageChange = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleFileSelect = async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            
-            const reader = new FileReader();
-            reader.onload = () => {
-                setPreviewUrl(reader.result);
-                setSelectedImage(file);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleImageUpload = async () => {
-        if (!selectedImage) return;
-        
-        const toastID = toast.loading("Uploading image...");
-        try {
-            
-            const formData = new FormData();
-            formData.append("avatar", selectedImage);
-            
-            const response=await uploadImage(formData);
-            
-            if (response.success) {
-                toast.success("Avatar updated successfully", {id: toastID});
-            } else {
-                toast.error("Failed to update avatar", {id: toastID, description: response.message});
-            }
-        } catch (error) {
-            console.error("Error uploading image:", error);
-            toast.error("Failed to update avatar", {id: toastID, description: "An error occurred"});
-        } finally {
-            setSelectedImage(null);
-            setPreviewUrl(null);
-            setTimeout(() => {
-                toast.dismiss(toastID);
-            }, 4000);
-        }
-    };
 
     return (
         <div className="min-h-screen bg-black pb-16">
@@ -133,13 +84,7 @@ const SettingPage = () => {
                     
                                 <div className="flex flex-col items-center">
                                 <div className="w-32 h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
-                                    {previewUrl ? (
-                                        <img 
-                                            src={previewUrl} 
-                                            alt="Preview" 
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : session?.user?.image ? (
+                                   {userData?.image ? (
                                         <img 
                                             src={session?.user?.image} 
                                             alt="Profile" 
@@ -150,34 +95,15 @@ const SettingPage = () => {
                                     )}
                                 </div>
 
-                                {/* Hidden file input */}
-                                <input 
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileSelect}
-                                    accept="image/*"
-                                    className="hidden"
-                                />
-
                                 <div className="mt-4 flex gap-2">
                                     <Button 
                                         variant="outline"
-                                        className="text-black border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-2"
-                                        onClick={handleImageChange}
+                                        className="text-black cursor-pointer border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-2"
+                                        onClick={()=>{}}
                                     >
                                         <ImageIcon size={16} />
-                                        <span>Select Image</span>
+                                        <span>Change Avatar</span>
                                     </Button>
-                                    
-                                    {selectedImage && (
-                                        <Button 
-                                            variant="default"
-                                            className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
-                                            onClick={handleImageUpload}
-                                        >
-                                            Upload
-                                        </Button>
-                                    )}
                                 </div>
                                 </div>
 
@@ -188,7 +114,7 @@ const SettingPage = () => {
                                             <Label className="text-gray-400 text-sm">User ID</Label>
                                             <div className="flex items-center gap-2 text-white bg-purple-900/20 p-2 rounded overflow-hidden">
                                                 <code className="text-sm font-mono truncate">
-                                                    {session?.user?.id || "N/A"}
+                                                    {userData?._id || "N/A"}
                                                 </code>
                                             </div>
                                         </div>
@@ -198,14 +124,14 @@ const SettingPage = () => {
                                                 <Label className="text-gray-400 text-sm">Name</Label>
                                                 <div className="flex items-center gap-2 text-white bg-purple-900/20 p-3 rounded">
                                                     <User size={16} className="text-purple-500" />
-                                                    <span>{session?.user?.name || "N/A"}</span>
+                                                    <span>{userData?.username || "N/A"}</span>
                                                 </div>
                                             </div>
                                             <div className="flex-1 space-y-1">
                                                 <Label className="text-gray-400 text-sm">Email</Label>
                                                 <div className="flex items-center gap-2 text-white bg-purple-900/20 p-3 rounded">
                                                     <Mail size={16} className="text-purple-500" />
-                                                    <span>{session?.user?.email || "N/A"}</span>
+                                                    <span>{userData?.email || "N/A"}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -240,7 +166,7 @@ const SettingPage = () => {
                                    <div>
                                         <h3 className="text-lg font-medium text-white">Two-Factor Authentication</h3>
                                         <p className="text-gray-400">
-                                            {twoFactorField 
+                                            {userData?.twoFactorEnabled 
                                                 ? "Two-factor authentication is currently enabled"
                                                 : "Add an extra layer of security to your account"
                                             }
@@ -248,10 +174,10 @@ const SettingPage = () => {
                                     </div>
                                 </div>
                                 <Link href="/2FA">
-                                    <Button className={`cursor-pointer ${twoFactorField 
+                                    <Button className={`cursor-pointer ${userData?.twoFactorEnabled 
                                         ? "bg-red-600 hover:bg-red-700" 
                                         : "bg-purple-600 hover:bg-purple-700"} text-white transition-colors`}>
-                                        {twoFactorField  ? "Disable 2FA" : "Enable 2FA"}
+                                        {userData?.twoFactorEnabledcls  ? "Disable 2FA" : "Enable 2FA"}
                                     </Button>
                                 </Link>
                             </div>
