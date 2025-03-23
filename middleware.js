@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function middleware(req){
 
     const loginToken=await getToken({req,secret:process.env.AUTH_SECRET});
-    
+    console.log("Login Token:",loginToken);
      if(!loginToken)
     {
         const loginURL=new URL("/auth-backend",req.url);  //req.url==base url  
