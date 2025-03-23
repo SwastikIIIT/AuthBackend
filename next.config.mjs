@@ -3,9 +3,7 @@ const nextConfig = {
    experimental: {
     appDir: true,
     serverComponentsExternalPackages: ["mongoose"],
-    staticPageGenerationTimeout: 0,
   },
-  reactStrictMode: true,
   webpack(config) {
     config.experiments = {
       ...config.experiments,
