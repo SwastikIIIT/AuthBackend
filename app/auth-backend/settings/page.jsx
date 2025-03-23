@@ -80,25 +80,25 @@ const SettingPage = () => {
                         </CardHeader>
 
                         <CardContent className="py-4">
-                            <div className="flex flex-col md:flex-row items-start gap-6">
+                           <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                     
-                                <div className="flex flex-col items-center">
-                                <div className="w-32 h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
-                                   {userData?.image ? (
-                                        <img 
-                                            src={session?.user?.image} 
-                                            alt="Profile" 
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <UserCircle size={80} className="text-purple-500" />
-                                    )}
-                                </div>
+                                <div className="flex flex-col items-center w-full md:w-auto">
+                                    <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
+                                    {userData?.image ? (
+                                            <img 
+                                                src={session?.user?.image} 
+                                                alt="Profile" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <UserCircle size={80} className="text-purple-500" />
+                                        )}
+                                    </div>
 
                                 <div className="mt-4 flex gap-2">
                                     <Button 
                                         variant="outline"
-                                        className="text-black cursor-pointer border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-2"
+                                       className="text-xs md:text-sm text-black cursor-pointer border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2"
                                         onClick={()=>{}}
                                     >
                                         <ImageIcon size={16} />
@@ -108,12 +108,12 @@ const SettingPage = () => {
                                 </div>
 
                                 {/* User Information Section */}
-                                <div className="flex-1 space-y-6">
-                                    <div className="bg-purple-900/10 rounded-md border border-purple-900/20 p-5 space-y-4">
+                                <div className="flex-1 space-y-6 w-full">
+                                    <div className="bg-purple-900/10 rounded-md border border-purple-900/20 p-3 md:p-5 space-y-4">
                                         <div className="flex flex-col space-y-1">
                                             <Label className="text-gray-400 text-sm">User ID</Label>
                                             <div className="flex items-center gap-2 text-white bg-purple-900/20 p-2 rounded overflow-hidden">
-                                                <code className="text-sm font-mono truncate">
+                                                <code className="text-xs md:text-sm font-mono truncate">
                                                     {userData?._id || "N/A"}
                                                 </code>
                                             </div>
@@ -124,14 +124,14 @@ const SettingPage = () => {
                                                 <Label className="text-gray-400 text-sm">Name</Label>
                                                 <div className="flex items-center gap-2 text-white bg-purple-900/20 p-3 rounded">
                                                     <User size={16} className="text-purple-500" />
-                                                    <span>{userData?.username || "N/A"}</span>
+                                                    <span className="text-sm md:text-base truncate">{userData?.username || "N/A"}</span>
                                                 </div>
                                             </div>
                                             <div className="flex-1 space-y-1">
                                                 <Label className="text-gray-400 text-sm">Email</Label>
                                                 <div className="flex items-center gap-2 text-white bg-purple-900/20 p-3 rounded">
                                                     <Mail size={16} className="text-purple-500" />
-                                                    <span>{userData?.email || "N/A"}</span>
+                                                    <span className="text-sm md:text-base truncate">{userData?.email || "N/A"}</span>
                                                 </div>
                                             </div>
                                         </div>

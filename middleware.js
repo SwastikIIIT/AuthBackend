@@ -10,6 +10,7 @@ export async function middleware(req){
         {
             const loginURL=new URL("/auth-backend",req.url);  //req.url==base url  
             loginURL.searchParams.set("auth","required");
+            console.log(req.url);
             console.log("Redirecting to:", loginURL.toString());
             return  NextResponse.redirect(loginURL);
         }

@@ -124,17 +124,17 @@ const DashboardPage = () => {
                 <div className="relative z-10 p-6">
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-shrink-0 flex justify-center md:justify-start">
-                    <div className="w-30 h-30 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
-                    {userInfo?.image ? (
-                          <img 
-                            src={userInfo.image} 
-                            alt={`${userInfo.username || 'User'}'s profile`}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <UserCircle size={80} className="text-purple-500" />
-                    )}
-                  </div>
+                            <div className="w-30 h-30 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
+                            {userInfo?.image ? (
+                                  <img 
+                                    src={userInfo.image} 
+                                    alt={`${userInfo.username || 'User'}'s profile`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <UserCircle size={80} className="text-purple-500" />
+                            )}
+                          </div>
                     </div>
                     
                     <div className="flex-1">
@@ -148,15 +148,15 @@ const DashboardPage = () => {
                         </p>
                       </div>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <div className="flex items-center gap-2">
-                          <Calendar size={16} className="text-purple-500" />
+                      <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-10 mt-4">
+                        <div className="flex items-center justify-center md:justify-start gap-2">
+                          <Calendar size={16} className="text-purple-500 flex-shrink-0" />
                           <span className="text-gray-300">Member since:</span>
                           <span className="text-white">{formatDate(userInfo?.createdAt)}</span>
                         </div>
                         
-                        <div className="flex items-center gap-2">
-                          <Key size={16} className="text-purple-500" />
+                        <div className="flex items-center justify-center md:justify-start gap-2">
+                          <Key size={16} className="text-purple-500 flex-shrink-0" />
                           <span className="text-gray-300">2FA Status:</span>
                           <span className={`px-2 py-1 rounded text-xs font-medium ${userInfo?.twoFactorEnabled ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
                             {userInfo?.twoFactorEnabled ? "Enabled" : "Disabled"}
