@@ -4,10 +4,13 @@ import { NextResponse } from "next/server";
 export async function middleware(req){
 
     const loginToken=await getToken({req,secret:process.env.AUTH_SECRET});
+    console.log("Token result:", loginToken ? "Token exists" : "No token");
+    
     if(!loginToken)
         {
             const loginURL=new URL("/auth-backend",req.url);  //req.url==base url  
             loginURL.searchParams.set("auth","required");
+            console.log("Redirecting to:", loginURL.toString());
             return  NextResponse.redirect(loginURL);
         }
         console.log(`Login Token at ${req.url} and ${loginURL}`,loginToken);
