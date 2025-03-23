@@ -1,18 +1,12 @@
-// "use client";
-// import dynamic from 'next/dynamic';
-// import React from "react";
+"use client";
+import ResetPasswordContent from "@/components/ResetPasswordContent";
+import React from "react";
 
-// // Dynamically import the content component with ssr disabled
-// const ResetPasswordContent = dynamic(
-//   () => import('./ResetPasswordContent'),
-//   { 
-//     ssr: false,
-//     loading: () => <div>Loading...</div>
-//   }
-// );
+const ResetPasswordPage = () => {
+  return 
+  (
 
-// const ResetPasswordPage = () => {
-//   return <ResetPasswordContent />;
-// };
+    <ResetPasswordContent/>);
+};
 
-// export default ResetPasswordPage;
+export default ResetPasswordPage;
