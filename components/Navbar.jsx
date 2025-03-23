@@ -82,14 +82,14 @@ const Navbar = ({session}) => {
                             <>
                             <Link href="/login">
                                 <button
-                                    className="flex text-white items-center space-x-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                                    className="flex cursor-pointer text-white items-center space-x-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                                 >
                                     <LogIn size={18} />
                                     <span>Login</span>
                                 </button>
                             </Link>
                             <Link href="/signup">
-                                <button className="flex text-white items-center space-x-2 bg-black border border-purple-600/60 hover:bg-purple-900/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                <button className="flex cursor-pointer text-white items-center space-x-2 bg-black border border-purple-600/60 hover:bg-purple-900/30 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                     <UserPlus size={18} />
                                     <span>Sign Up</span>
                                 </button>

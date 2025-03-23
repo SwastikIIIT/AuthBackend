@@ -7,8 +7,10 @@ import { handleAuth } from "@/helper/formcontrols/handleAuth";
 import { toast } from "sonner";
 import { handleSignup } from "@/helper/formcontrols/handleSignup";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
+  const router=useRouter();
   const signup = async (formData) => {
     const toastID = toast.loading("Signing up...");
     try {
@@ -18,11 +20,8 @@ const SignupForm = () => {
         toast.success(result.message, {
           id: toastID,
           description: "Your account has been successfully created. Welcome!",
-          cancel: {
-            label: "Later",
-            onClick: () => toast.dismiss(),
-          },
         });
+         router.push("/login");
     } catch (err) {
       if (err.message !== "NEXT_REDIRECT")
         toast.error(err.message, { id: toastID });
@@ -110,7 +109,7 @@ const SignupForm = () => {
 
           <Button 
             type="submit" 
-            className="w-full mt-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
+            className="w-full mt-2 cursor-pointer bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
           >
             <span>Create Account</span>
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -127,7 +126,7 @@ const SignupForm = () => {
       <form action={handleAuthLogin}>
         <Button
           variant="outline"
-          className="w-full border-purple-900/60 hover:border-purple-500 text-black hover:bg-purple-900/20 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 py-2"
+          className="w-full cursor-pointer border-purple-900/60 hover:border-purple-500 text-black hover:bg-purple-900/20 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 py-2"
         >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +144,7 @@ const SignupForm = () => {
 
       <div className="text-center text-gray-400 text-sm mt-2">
         Already have an account?{" "}
-        <Link href="/login" className="text-purple-400 hover:text-purple-300 transition-colors font-medium">
+        <Link href="/login" className="text-purple-400 cursor-pointer hover:text-purple-300 transition-colors font-medium">
           Login
         </Link>
       </div>

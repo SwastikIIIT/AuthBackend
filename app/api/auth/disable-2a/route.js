@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import User from "@/models/User";
 import { connectToMongo } from "@/utils/databse";
 
-export default async function POST(req,res)
+export async function POST(req,res)
 {
        try{
             

@@ -15,7 +15,7 @@ export async function POST(req) {
      try{
           try
           {
-             var decodedToken=jwt.verify(token, process.env.JWT_SECRET);
+             var decodedToken=jwt.verify(token,process.env.JWT_SECRET);
           }
           catch(e)
           {
@@ -35,6 +35,11 @@ export async function POST(req) {
           )
 
           await PasswordReset.deleteOne({_id:tokenDoc._id});
+
+          const user=await User.findOneAndUpdate(
+            {email:decodedToken.email},
+            {$set:{passwordLastChanged:new Date()}}
+          );
 
         return Response.json({success:true,message:"Password reset successfully"}); 
      }

@@ -5,13 +5,14 @@ import User from "./models/User";
 import { compare } from "bcryptjs";
 import { connectToMongo } from "./utils/databse";
 import speakeasy from 'speakeasy';
-
+import recordLoginHistory from "./helper/eventHandler/recordLoginHistory";
+import crypto from "crypto"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientId: process.env.AUTH_GOOGLE_ID,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET,
   }),
     Credentials({
       name: 'Credentials',
@@ -21,18 +22,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         twoFactorToken: { label: "2FA Code", type: "text" }
       },
 
-      async authorize(credentials) {
+      async authorize(credentials,req) {
             
         const email = credentials?.email;
         const password = credentials?.password;
         const twoFAcode=credentials?.twoFactorToken;
 
+        const response = await fetch('https://api.ipify.org?format=json');
+        const ipAddress=await response.json();
+        
+        // console.log(ipAddress?.ip);
+       
         console.log("Credentials received:",[email,password,twoFAcode]);
 
         if(!email || !password)
             throw new Error("Missing credentials");
 
-          //connect to database
+        //connect to database
         await connectToMongo();
 
         const user=await User.findOne({email: email}).select('+password');
@@ -43,9 +49,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isMatch=await compare(password,user.password);
         console.log("Password match:", isMatch);
         
+        //representing failed login for that email
         if(!isMatch)
+        {
+           await recordLoginHistory(user,ipAddress?.ip,false);
+           await user.save();
            throw new Error("Invalid Password");
-
+        }
 
         if(user.twoFactorEnabled)
         {
@@ -64,60 +74,88 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             window:1
           });
 
-
+          //representing failed login via 2fa code
            if(!verified)
-            throw new Error("Invalid Two Factor Code");
+           {
+              await recordLoginHistory(user,ipAddress?.ip,false);
+              await user.save();
+              throw new Error("Invalid Two Factor Code");
+           }
         }
 
+
+        //successful login
+        await recordLoginHistory(user,ipAddress?.ip,true);
+        user.lastLogin=new Date();
+        await user.save();
+       
+        console.log("User after updation",user);
         return {
           id: user?._id.toString(),
           email: user?.email,
           name: user?.username,
+          lastLogin:user?.lastLogin,
+          image:user?.image,
+          passwordLastChanged:user?.passwordLastChanged,
           hasTwoFactor: user?.twoFactorEnabled
         };
       } 
   })],
   pages: {
     signIn:'/login',
-    signOut:'/'
   },
   session:{
     strategy:"jwt"
   },
   callbacks: {
-    async signIn({user, account, profile})
+    async signIn({user,account,profile})
     {
       console.log("User in signIn callback:", user);
       console.log("Account in signIn callback:", account);
       console.log("Profile in signIn callback:", profile);
+
+      
       if(account?.provider==='google')
       {
             try
             {   
                    await connectToMongo();
-                   console.log("Mongo connected");
                    const {email,name,picture,sub}=profile;
+                   console.log("Mongo connected");
                    console.log("profile:",{email,name,picture,sub});
                     const userExists=await User.findOne({email: email});
                    
                     if(!userExists)
                     {
-                     const user= await User.create({
-                        email: email,
-                        username: name,
-                        image: picture,
-                        googleId: sub
-                      });
-                      console.log("New user created:", user);
-                    }
+                        const response = await fetch('https://api.ipify.org?format=json');
+                        const ipAddress=await response.json();
+                        const user= await User.create({
+                          email: email,
+                          username: name,
+                          password:crypto.randomBytes(16).toString('hex').slice(0,16),
+                          image: picture,
+                          googleId: sub,
+                          lastLogin:new Date(),
+                        });
+ 
+                        await recordLoginHistory(user,ipAddress?.ip,true);
+                        // await user.save();
+                        console.log("New user created:", user);
+                      }
+                      else
+                      {
+                        userExists.lastLogin=new Date();
+                        await userExists.save();
+                      }
                     return true;
             }
             catch(err)
             {
-              throw new Error("Error signing in with Google",err);
+               console.log("Error signing in with Google",err);
             }
+         return true;
       }
-      if(account?.provider === 'credentials') {
+      if(account?.provider==='credentials') {
         return true;
       }
       return false;
@@ -130,6 +168,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
            token.hasTwoFactor=user?.hasTwoFactor;
            token.email = user?.email;  
            token.name = user?.name;
+           token.image = user?.image;
+           token.lastLogin=user?.lastLogin;
+           token.passwordLastChanged=user?.passwordLastChanged;
         }
         return token;
     },
@@ -140,6 +181,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.hasTwoFactor=token?.hasTwoFactor;
         session.user.email=token?.email;
         session.user.name=token?.name;
+        session.user.image=token?.image;
+        session.user.lastLogin=token?.lastLogin;
+        session.user.passwordLastChanged=token?.passwordLastChanged;
       }
       // if(user)
       // {

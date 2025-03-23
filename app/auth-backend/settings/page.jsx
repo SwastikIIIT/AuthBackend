@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSession } from "next-auth/react"; 
@@ -7,16 +7,92 @@ import Link from "next/link";
 import { Shield, Lock, User, Mail, UserCircle, Image as ImageIcon, Key } from "lucide-react";
 import { motion } from "framer-motion";
 import { Label } from "@/components/ui/label";
+import fetchUserInfo from "@/helper/eventHandler/fetchUserInfo";
+import { toast } from "sonner";
+import uploadImage from "@/helper/eventHandler/uploadImage";
 
 const SettingPage = () => {
     const {data:session} = useSession();
+    const [twoFactorField,setTwoFactorField]=useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const fileInputRef = useRef(null);
     console.log("Session of settings", session);
-    const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false);
+    
+    useEffect(()=>{
+        const fetchUser=async()=>{
+            const toastID=toast.loading("Processing request...");
+            try
+            {
+                const result=await fetchUserInfo();
+                if(result.success)
+                {
+                    toast.success("Loading successful",{id:toastID,description:result.message});
+                    if(result?.userData?.twoFactorEnabled)
+                    setTwoFactorField(true);
+                }
+                else{
+                    toast.error("Loading unsuccessful",{id:toastID,description:result.message});
+                }
+            }
+            catch(err)
+            {
+                console.log(err);
+                toast.error("Loadin unsuccessful",{id:toastID,description:result.message})
+            }
+            finally{
+                setTimeout(()=>{
+                    toast.dismiss(toastID);
+                },4000)
+            }
+        }
+        fetchUser();
+    },[session])
 
-    useEffect(() => {
-        if(session?.user?.hasTwoFactor)
-            setShowTwoFactorSetup(true);
-    }, [session]);
+    const handleImageChange = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileSelect = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            
+            const reader = new FileReader();
+            reader.onload = () => {
+                setPreviewUrl(reader.result);
+                setSelectedImage(file);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleImageUpload = async () => {
+        if (!selectedImage) return;
+        
+        const toastID = toast.loading("Uploading image...");
+        try {
+            
+            const formData = new FormData();
+            formData.append("avatar", selectedImage);
+            
+            const response=await uploadImage(formData);
+            
+            if (response.success) {
+                toast.success("Avatar updated successfully", {id: toastID});
+            } else {
+                toast.error("Failed to update avatar", {id: toastID, description: response.message});
+            }
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            toast.error("Failed to update avatar", {id: toastID, description: "An error occurred"});
+        } finally {
+            setSelectedImage(null);
+            setPreviewUrl(null);
+            setTimeout(() => {
+                toast.dismiss(toastID);
+            }, 4000);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-black pb-16">
@@ -56,23 +132,53 @@ const SettingPage = () => {
                             <div className="flex flex-col md:flex-row items-start gap-6">
                     
                                 <div className="flex flex-col items-center">
-                                    <div className="w-32 h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
-                                        {session?.user?.image ? (
-                                            <img 
-                                                src={session?.user?.image} 
-                                                alt="Profile" 
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <UserCircle size={80} className="text-purple-500" />
-                                        )}
-                                    </div>
+                                <div className="w-32 h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
+                                    {previewUrl ? (
+                                        <img 
+                                            src={previewUrl} 
+                                            alt="Preview" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : session?.user?.image ? (
+                                        <img 
+                                            src={session?.user?.image} 
+                                            alt="Profile" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <UserCircle size={80} className="text-purple-500" />
+                                    )}
+                                </div>
 
-                                    <Button variant="outline"
-                                     className="mt-4 text-black border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-2">
+                                {/* Hidden file input */}
+                                <input 
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileSelect}
+                                    accept="image/*"
+                                    className="hidden"
+                                />
+
+                                <div className="mt-4 flex gap-2">
+                                    <Button 
+                                        variant="outline"
+                                        className="text-black border-purple-600/60 hover:bg-purple-900/30 hover:text-white flex items-center gap-2"
+                                        onClick={handleImageChange}
+                                    >
                                         <ImageIcon size={16} />
-                                        <span>Change Avatar</span>
+                                        <span>Select Image</span>
                                     </Button>
+                                    
+                                    {selectedImage && (
+                                        <Button 
+                                            variant="default"
+                                            className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+                                            onClick={handleImageUpload}
+                                        >
+                                            Upload
+                                        </Button>
+                                    )}
+                                </div>
                                 </div>
 
                                 {/* User Information Section */}
@@ -134,7 +240,7 @@ const SettingPage = () => {
                                    <div>
                                         <h3 className="text-lg font-medium text-white">Two-Factor Authentication</h3>
                                         <p className="text-gray-400">
-                                            {showTwoFactorSetup 
+                                            {twoFactorField 
                                                 ? "Two-factor authentication is currently enabled"
                                                 : "Add an extra layer of security to your account"
                                             }
@@ -142,10 +248,10 @@ const SettingPage = () => {
                                     </div>
                                 </div>
                                 <Link href="/2FA">
-                                    <Button className={`${showTwoFactorSetup 
+                                    <Button className={`cursor-pointer ${twoFactorField 
                                         ? "bg-red-600 hover:bg-red-700" 
                                         : "bg-purple-600 hover:bg-purple-700"} text-white transition-colors`}>
-                                        {showTwoFactorSetup ? "Disable 2FA" : "Enable 2FA"}
+                                        {twoFactorField  ? "Disable 2FA" : "Enable 2FA"}
                                     </Button>
                                 </Link>
                             </div>
@@ -160,7 +266,7 @@ const SettingPage = () => {
                                     </div>
                                 </div>
                                 <Link href='/forgot-password'>
-                                    <Button variant="outline" className="border-purple-600/60 text-black hover:bg-purple-900/30 hover:text-white transition-colors">
+                                    <Button variant="outline" className="cursor-pointer border-purple-600/60 text-black hover:bg-purple-900/30 hover:text-white transition-colors">
                                         Change Password
                                     </Button>
                                 </Link>

@@ -3,7 +3,7 @@ import User from "@/models/User";
 import { connectToMongo } from "@/utils/databse";
 import speakeasy from "speakeasy";
 
-export default async function POST(req,res)
+export async function POST(req,res)
 {
       const {token,secret}=await req.json();
 

@@ -2,10 +2,10 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function middleware(req){
-  
-    const token=await getToken({req,secret:process.env.AUTH_SECRET});
+
+    const loginToken=await getToken({req,secret:process.env.AUTH_SECRET});
     
-     if(!token)
+     if(!loginToken)
     {
         const loginURL=new URL("/auth-backend",req.url);  //req.url==base url  
         loginURL.searchParams.set("auth","required");
@@ -15,7 +15,7 @@ export async function middleware(req){
 }
    
 export const config={
-    matcher:["/auth-backend/dashboard/:path*"]
+    matcher:["/auth-backend/dashboard/:path*","/auth-backend/settings/:path*"]
 }
 
 // export { auth as middleware } from "@/auth"

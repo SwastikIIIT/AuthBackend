@@ -15,7 +15,6 @@ const UserSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:[true,"Password is required"],
         select:false,
         minlength:[6,"Password must be atleast 6 characters long"]
     },
@@ -27,11 +26,44 @@ const UserSchema = new mongoose.Schema({
         type:String,
         default:null
     },
+    image:{
+        type:String,
+        default:null
+    },
     createdAt:{
+        type:Date,
+        default:Date.now
+    },
+    lastLogin:{
+        type:Date,
+        default:null
+    },
+    loginHistory:[{
+        timestamp:{
+            type:Date,
+            default:Date.now
+        },
+        ipAddress:{
+            type:String,
+            default:null
+        },
+        // userAgent:{
+        //     type:String,
+        //     default:null
+        // },
+        success:{
+            type:Boolean,
+            default:true
+        }
+    }
+    ],
+    passwordLastChanged:{
         type:Date,
         default:Date.now
     }
 });
+
+
 
 //used optional chaining operator for resolving undefined user model error
 const User=mongoose.models?.User || mongoose.model('User',UserSchema);

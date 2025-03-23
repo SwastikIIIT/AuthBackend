@@ -14,7 +14,7 @@ const LoginForm = () => {
   const [show2faField, set2faField] = useState(false);
   const router = useRouter();
 
-  const handleCredentialLogin = async (formData) => {
+  const handleCredentialLogin=async(formData)=>{
     const toastID = toast.loading("Logging in...", {
       description: "Verifying your credentials",
     });
@@ -22,34 +22,46 @@ const LoginForm = () => {
     try {
       const result = await handleLogin(formData, show2faField);
 
-      if (result.success) {
-        toast.success(result.message, {
-          id: toastID,
-          description: "Welcome back! You've been securely logged in.",
-        });
+      if(result.success)
+      {
+          toast.success(result.message, {
+            id: toastID,
+            description: "Welcome back! You've been securely logged in.",
+          });
         router.push("/auth-backend");
-      } else {
-        if (result.twoFactorField)
+      }
+      else
+      {
+          if(result.twoFactorField)
           set2faField(true);
-        toast.error("Login failed", { id: toastID, description: result.message })
+          toast.error("Login failed", { id: toastID, description: result.message })
       }
     }
-    catch (err) {
-      if (err.message !== "NEXT_REDIRECT")
+    catch(err)
+    {
+       if(err.message!=="NEXT_REDIRECT")
         toast.error("Failed to login", { id: toastID, description: err.message });
     }
-    finally {
+    finally{
       setTimeout(() => {
         toast.dismiss(toastID);
-      }, 5000);
+      },5000);
     }
   };
 
-  const handleAuthLogin = async () => {
+  const handleAuthLogin=async()=>{
+    const toastID=toast.loading("Logging in with Google...")
     try {
-      await handleAuth();
-    } catch (err) {
-      toast.error(err.message);
+        await handleAuth();
+    } 
+    catch(err){
+      console.log(err);
+      toast.error(err.message,{id:toastID});
+    }
+    finally{
+      setTimeout(()=>{
+         toast.dismiss(toastID);
+      },3000)
     }
   };
 
@@ -124,7 +136,7 @@ const LoginForm = () => {
 
           <Button 
             type="submit" 
-            className="w-full mt-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
+            className="w-full mt-2 cursor-pointer bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
           >
             <span>Sign In</span>
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -141,12 +153,12 @@ const LoginForm = () => {
       <form action={handleAuthLogin}>
         <Button
           variant="outline"
-          className="w-full border-purple-900/60 hover:border-purple-500 text-black hover:bg-purple-900/20 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 py-2"
+          className="w-full border-purple-900/60 cursor-pointer hover:border-purple-500 text-black hover:bg-purple-900/20 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 py-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            className="h-5 w-5 hover:text-white"
+            className="h-5 w-5  hover:text-white"
           >
             <path
               d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"

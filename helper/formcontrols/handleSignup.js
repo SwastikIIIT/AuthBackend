@@ -34,6 +34,6 @@ export const handleSignup=async(formData)=>{
           password:hashedPassword
         });
         return {ok:"success",message:"Account created successfully :)"};
-        redirect("/login");
+        // redirect("/login");
       }
   }

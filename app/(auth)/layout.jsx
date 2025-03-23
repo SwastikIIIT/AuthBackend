@@ -52,7 +52,7 @@ const AuthLayout = ({ children }) => {
             height={40}
             alt="Logo"
           />
-          <Link href="/" className="relative group">
+          <Link href="/auth-backend" className="relative group">
              <span className="font-bold text-2xl lg:text-2xl xl:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-100">
                 Auth Backend
               </span>

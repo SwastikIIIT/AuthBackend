@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import qrcode from 'qrcode';
 import speakeasy from "speakeasy";
 
-export  async function GET(req,res)
+export async function GET(req,res)
 {
        try
        {

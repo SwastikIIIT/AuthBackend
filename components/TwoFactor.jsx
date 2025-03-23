@@ -10,6 +10,13 @@ import disable2FA from '@/helper/eventHandler/disable2FA';
 import { toast } from 'sonner';
 import handleVerify2FA from '@/helper/formcontrols/handleVerify2FA';
 import { Shield, QrCode, Key, AlertCircle, CheckCircle, ArrowRight, PencilLine } from 'lucide-react';
+import Link from 'next/link';
+import fetchUserInfo from '@/helper/eventHandler/fetchUserInfo';
+import {
+    AlertDialog,AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription,AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+import {TriangleAlert } from 'lucide-react';
 
 const TwoFactorComponent = () => {
     
@@ -21,10 +28,21 @@ const TwoFactorComponent = () => {
 
 
     useEffect(()=>{
-         if(session?.user?.twoFactorEnabled)
-          setHasTwoFactor(true);
+         const fetchUser=async()=>{
+               try{
+                   const result=await fetchUserInfo();
+                    if(result.success && result?.userData?.twoFactorEnabled)
+                    {  
+                       setHasTwoFactor(true);
+                    }
+               }
+               catch(err)
+               {
+                  console.log(err);
+               }
+         }
+         fetchUser();
     },[session])
-
 
     const handleVerify=async(formData)=>{
            const toastID=toast.loading("Processing request...", {
@@ -134,7 +152,7 @@ const TwoFactorComponent = () => {
            },5000)
          }
     }
-    
+    console.log("Has Two Factor",hasTwoFactor);
   return (
     <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
        
@@ -167,18 +185,49 @@ const TwoFactorComponent = () => {
                   <CheckCircle size={18} className="text-green-400" />
                   <p className="text-gray-300 font-medium">Two-factor authentication is enabled</p>
                 </div>
-                <Button 
-                  onClick={disable_2FA}
-                  className="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
-                  <span>Disable Two-Factor Authentication</span>
-                  <AlertCircle size={16} />
-                </Button>
+
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button className="cursor-pointer w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
+                        <span>Disable Two-Factor Authentication</span>
+                        <AlertCircle size={16} className="mt-0.5"/>
+                      </Button>
+                    </AlertDialogTrigger>
+                    
+                    <AlertDialogContent className="bg-black border border-purple-900/40 text-white shadow-lg shadow-purple-900/20">
+                      <AlertDialogHeader>
+                        <div className="flex items-center gap-2 mb-2">
+                          <TriangleAlert className="text-red-500" size={24} />
+                          <AlertDialogTitle className="text-white text-xl font-bold">Are you absolutely sure?</AlertDialogTitle>
+                        </div>
+                        <AlertDialogDescription className="text-gray-300 text-base">
+                          This will disable two-factor authentication for your account, making it less secure.
+                          You will no longer need a verification code to log in.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+
+                      <AlertDialogFooter className="flex space-x-4 mt-6">
+                        <AlertDialogCancel 
+                          className="cursor-pointer bg-black border border-purple-600/60 text-white hover:bg-purple-900/30 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2"
+                        >
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction 
+                         onClick={disable_2FA}
+                          className="cursor-pointer bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2"
+                        >
+                          <span>Continue</span> 
+                          <ArrowRight size={18} />
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
              </>
           ) : (
              <>
                 <Button 
                   onClick={setup2FA}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
+                  className="cursor-pointer w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
                   <span>Set Up Two-Factor Authentication</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
@@ -241,7 +290,7 @@ const TwoFactorComponent = () => {
               
               <Button
                  type="submit" 
-                 className="w-full mt-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
+                 className="cursor-pointer w-full mt-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300">
                 <span>Verify and Enable</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
@@ -276,14 +325,15 @@ const TwoFactorComponent = () => {
               to your account.
             </p>
           </div>
-          
-          <Button 
-            onClick={() => window.location.href = "/auth-backend/settings"} 
-            className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
-          >
-            <span>Return to Account</span>
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-          </Button>
+
+          <Link href="/auth-backend/settings">
+            <Button  
+              className="cursor-pointer w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 flex items-center justify-center gap-2 group transition-all duration-300"
+            >
+              <span>Return to Account</span>
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+            </Button>
+          </Link>
         </div>
       )}
 
