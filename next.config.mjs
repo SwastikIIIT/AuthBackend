@@ -5,6 +5,7 @@ const nextConfig = {
     serverComponentsExternalPackages: ["mongoose"],
     staticPageGenerationTimeout: 0,
   },
+  reactStrictMode: true,
   webpack(config) {
     config.experiments = {
       ...config.experiments,

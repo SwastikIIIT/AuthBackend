@@ -2,10 +2,10 @@
 import ResetPasswordForm from "@/components/ResetPasswordForm";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect} from "react";
 import { toast } from "sonner";
 
-const ResetPasswordContent = () => {
+const ResetPasswordPage = () => {
   const search = useSearchParams();
   const token = search.get("token");
   const router = useRouter();
@@ -30,14 +30,6 @@ const ResetPasswordContent = () => {
     <div className="container mx-auto py-8">
       <ResetPasswordForm token={token} />
     </div>
-  );
-};
-
-const ResetPasswordPage = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ResetPasswordContent />
-    </Suspense>
   );
 };
 
