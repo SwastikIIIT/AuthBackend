@@ -1,15 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Updated from experimental.serverComponentsExternalPackages
-  serverExternalPackages: ["mongoose"],
-  
-  // Keep React strict mode
+   experimental: {
+    appDir: true,
+    serverComponentsExternalPackages: ["mongoose"],
+    staticPageGenerationTimeout: 0,
+  },
   reactStrictMode: true,
-  
-  // Add timeout for static generation
-  staticPageGenerationTimeout: 1000,
-  
-  // Keep your webpack config for top level await
   webpack(config) {
     config.experiments = {
       ...config.experiments,
