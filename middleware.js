@@ -13,7 +13,6 @@ export async function middleware(req){
             console.log("Redirecting to:", loginURL.toString());
             return  NextResponse.redirect(loginURL);
         }
-        console.log(`Login Token at ${req.url} and ${loginURL}`,loginToken);
     return NextResponse.next();
 }
    
