@@ -127,7 +127,7 @@ const DashboardPage = () => {
                             <div className="w-30 h-30 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
                             {userInfo?.image ? (
                                   <img 
-                                    src={userInfo.image} 
+                                    src={userInfo?.image} 
                                     alt={`${userInfo.username || 'User'}'s profile`}
                                     className="w-full h-full object-cover"
                                   />

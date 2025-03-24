@@ -86,7 +86,7 @@ const SettingPage = () => {
                                     <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-purple-900/20 border-2 border-purple-600/60 flex items-center justify-center overflow-hidden">
                                     {userData?.image ? (
                                             <img 
-                                                src={session?.user?.image} 
+                                                src={userData?.image} 
                                                 alt="Profile" 
                                                 className="w-full h-full object-cover"
                                             />

@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-  console.log("Middleware running for path:", req.nextUrl.pathname);
   
-  const authCookie = req.cookies.get('authjs.session-token');
+  const Cookie = req.cookies.get('authjs.session-token');
   
-  console.log("Auth cookie found:", !!authCookie);
+  console.log("Auth cookie found:",Cookie);
   
-  if (!authCookie) {
+  if (!Cookie) {
     const loginURL = new URL("/auth-backend", req.url);
     loginURL.searchParams.set("auth", "required");
-    console.log("Redirecting to:", loginURL.toString());
     return NextResponse.redirect(loginURL);
   }
 
-  console.log("User appears to be logged in, proceeding");
   return NextResponse.next();
 }
 
