@@ -40,7 +40,7 @@ const DashboardPage = () => {
     }
     fetchUser();
   }, [session]);
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -203,12 +203,12 @@ const DashboardPage = () => {
                 </div>
                 
                 <div className="mt-6 space-y-4">
-                  {/* <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-300">Email Verified</span>
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${userInfo?.emailVerified ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
-                      {userInfo?.emailVerified ? "Verified" : "Pending"}
+                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${userInfo?.isVerified ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {userInfo?.isVerified ? "Verified" : "Pending"}
                     </span>
-                  </div> */}
+                  </div>
                   
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">Two-Factor Authentication</span>
@@ -401,21 +401,44 @@ const DashboardPage = () => {
                 </div>
                 
                 {/* Email Verification */}
-                {/* <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">
+                <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-white font-medium">Email Verification</h3>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                      userInfo?.emailVerified
+                      userInfo?.isVerified
                         ? "bg-green-500/20 text-green-400" 
                         : "bg-yellow-500/20 text-yellow-400"
                     }`}>
-                      {userInfo?.emailVerified ? "Verified" : "Not Verified"}
+                      {userInfo?.isVerified ? "Verified" : "Not Verified"}
                     </span>
                   </div>
                   <p className="text-gray-400 text-sm">
-                    {userInfo?.emailVerified
+                    {userInfo?.isVerified
                       ? "Your email has been successfully verified." 
                       : "Please verify your email for additional security."}
+                  </p>
+                </div>
+
+               {/* Password Strength */}
+                {/* <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-white font-medium">Password Strength</h3>
+                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                      userInfo?.passwordStrength === 'strong'
+                        ? "bg-green-500/20 text-green-400" 
+                        : userInfo?.passwordStrength === 'moderate'
+                          ? "bg-yellow-500/20 text-yellow-400"
+                          : "bg-red-500/20 text-red-400"
+                    }`}>
+                      {userInfo?.passwordStrength ? userInfo.passwordStrength.charAt(0).toUpperCase() + userInfo.passwordStrength.slice(1) : "Weak"}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    {userInfo?.passwordStrength === 'strong'
+                      ? "Your password is strong and secure." 
+                      : userInfo?.passwordStrength === 'moderate'
+                        ? "Your password has moderate security. Consider strengthening it."
+                        : "Your password is weak. Update it to improve security."}
                   </p>
                 </div> */}
                 

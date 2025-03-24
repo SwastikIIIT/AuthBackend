@@ -17,15 +17,16 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import {TriangleAlert } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const TwoFactorComponent = () => {
     
     const {data:session}=useSession();
+    const router=useRouter();
     const [step,setStep]=useState('initial');
     const [secret,setSecret]=useState('');
     const [qrcode,setQrcode]=useState('');
     const [hasTwoFactor, setHasTwoFactor] = useState(false);
-
 
     useEffect(()=>{
          const fetchUser=async()=>{
@@ -42,7 +43,7 @@ const TwoFactorComponent = () => {
                }
          }
          fetchUser();
-    },[session])
+    },[session,router])
 
     const handleVerify=async(formData)=>{
            const toastID=toast.loading("Processing request...", {

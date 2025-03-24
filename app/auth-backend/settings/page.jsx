@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import { Label } from "@/components/ui/label";
 import fetchUserInfo from "@/helper/eventHandler/fetchUserInfo";
 import { toast } from "sonner";
-import uploadImage from "@/helper/eventHandler/uploadImage";
 
 const SettingPage = () => {
     const {data:session} = useSession();
@@ -160,6 +159,7 @@ const SettingPage = () => {
                         </CardHeader>
                         
                         <CardContent className="pt-4">
+                           {/* 2FA */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between py-4 px-3 rounded-md hover:bg-purple-900/20 transition-colors">
                                 <div className="flex items-center space-x-3 mb-4 md:mb-0">
                                    <Key size={18} className="text-purple-500"/>
@@ -182,7 +182,7 @@ const SettingPage = () => {
                                 </Link>
                             </div>
                             
-                            {/* Add password change option here */}
+                            {/*password change*/}
                             <div className="flex flex-col md:flex-row md:items-center justify-between py-4 px-3 mt-4 border-t border-purple-900/20 rounded-md hover:bg-purple-900/10 transition-colors">
                                 <div className="flex items-center space-x-3 mb-4 md:mb-0">
                                     <Lock size={18} className="text-purple-500" />
@@ -196,6 +196,30 @@ const SettingPage = () => {
                                         Change Password
                                     </Button>
                                 </Link>
+                            </div>
+
+                            {/* verify email */}
+                            <div className="flex flex-col md:flex-row md:items-center justify-between py-4 px-3 rounded-md hover:bg-purple-900/20 transition-colors">
+                                <div className="flex items-center space-x-3 mb-4 md:mb-0">
+                                <Mail size={18} className="text-purple-500"/>
+                                <div>
+                                        <h3 className="text-lg font-medium text-white">Email Verification</h3>
+                                        <p className="text-gray-400">
+                                            {userData?.emailVerified 
+                                                ? "Your email has been verified"
+                                                : "Verify your email address to secure your account"
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                                {userData?.isVerified?(
+                                   <Button className="bg-green-600 hover:bg-green-700  text-white transition-colors disabled">Verified</Button>
+                                ):(
+                                    <Link href="/verifyEmail">
+                                    <Button className="bg-purple-600 cursor-pointer hover:bg-purple-700 text-white transition-colors">Verify Email</Button>
+                                </Link>
+                                )}
+                                
                             </div>
                         </CardContent>
                     </Card>
