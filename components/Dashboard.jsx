@@ -318,7 +318,7 @@ const DashboardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {userInfo?.loginHistory?.slice(0,5).map((item,key)=>(
+                      {userInfo?.loginHistory?.slice(5,10).map((item,key)=>(
                         <tr key={key} className="border-b border-purple-900/10">
                           <td className="py-3 text-gray-300 text-sm">{formatDateTime(item.timestamp)}</td>
                           <td className="py-3 text-gray-300 text-sm">
@@ -420,27 +420,27 @@ const DashboardPage = () => {
                 </div>
 
                {/* Password Strength */}
-                {/* <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">
+                <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-white font-medium">Password Strength</h3>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                      userInfo?.passwordStrength === 'strong'
+                      userInfo?.passwordStrength === 'Strong'
                         ? "bg-green-500/20 text-green-400" 
-                        : userInfo?.passwordStrength === 'moderate'
+                        : userInfo?.passwordStrength === 'Moderate'
                           ? "bg-yellow-500/20 text-yellow-400"
                           : "bg-red-500/20 text-red-400"
                     }`}>
-                      {userInfo?.passwordStrength ? userInfo.passwordStrength.charAt(0).toUpperCase() + userInfo.passwordStrength.slice(1) : "Weak"}
+                      {userInfo?.passwordStrength}
                     </span>
                   </div>
                   <p className="text-gray-400 text-sm">
-                    {userInfo?.passwordStrength === 'strong'
+                    {userInfo?.passwordStrength === 'Strong'
                       ? "Your password is strong and secure." 
-                      : userInfo?.passwordStrength === 'moderate'
+                      : userInfo?.passwordStrength === 'Moderate'
                         ? "Your password has moderate security. Consider strengthening it."
                         : "Your password is weak. Update it to improve security."}
                   </p>
-                </div> */}
+                </div>
                 
                 {/* Device Information */}
                 {/* <div className="bg-purple-900/10 rounded-lg p-4 border border-purple-900/30">

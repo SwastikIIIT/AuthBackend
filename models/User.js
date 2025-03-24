@@ -1,3 +1,4 @@
+import { passwordStrength } from "@/helper/formcontrols/handleSignup";
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
@@ -8,6 +9,10 @@ const UserSchema = new mongoose.Schema({
     },
     isVerified:{
         type:Boolean,
+        default:false
+    },
+    passwordStrength:{
+        type:String,
         default:false
     },
     email:{
