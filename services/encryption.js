@@ -1,11 +1,4 @@
-import { chainMap } from "@/lib/mapping";
-import { nagaDev } from "@lit-protocol/networks";
-import { createLitClient } from "@lit-protocol/lit-client";
-import { createAccBuilder } from "@lit-protocol/access-control-conditions";
-import { createAuthManager, storagePlugins } from "@lit-protocol/auth";
 import crypto from "crypto";
-import { createWalletClient, custom, getAddress } from "viem";
-
 
 // Elliptic Curve cryptography
 
@@ -96,73 +89,6 @@ class Encryption {
       throw new Error(err?.message || "Failed to decrypt");
     }
   }
-
-   /**
-   * Decrypts the AES Key using LIT.
-   * @param {string} cipher - The encrypted string
-   * @param {string} digest - dataToEncrypt Hash string
-   * @param {string} chainId - The lit hash
-   * @param {string} userAddress - The user's account address
-   */
-   static async decryptAESKeyWithLit(cipher,digest,chainId,userAddress) {
-    try {
-      const litChain=chainMap[chainId.toString()];
-      if (!litChain) throw new Error(`Unsupported chain ID for Lit Protocol:${chainId}`);
-      console.log("Lit Chain in decryption phase:",litChain);
-      
-      const client=await createLitClient({network: nagaDev});
-      const builder=createAccBuilder();
-      const accessControlConditions=builder
-                .requireWalletOwnership(userAddress)
-                .on(litChain)
-                .build();
-
-      const authManager = createAuthManager({
-        storage: storagePlugins.localStorage({
-          appName: "decentralized-vault",
-          networkName: "naga-local",
-        }),
-      });
-
-      const checksummedAddress=getAddress(userAddress);
-
-      const walletClient=createWalletClient({
-        transport:custom(window.ethereum),
-        account:checksummedAddress,
-      });
-
-      const authContext=await authManager.createEoaAuthContext({
-        config:{account:walletClient},
-        authConfig:{
-          domain: window.location.hostname || "localhost",
-          statement: "I authorize decrypting my AES key.",
-          expiration: new Date(Date.now() + 1000 * 60 * 15).toISOString(), // 15 mins expiry
-          resources: [
-            ["access-control-condition-decryption", "*"],
-            ["lit-action-execution", "*"]
-          ],
-        },
-        litClient:client
-      });
-
-      const decryptedResponse = await client.decrypt({
-        ciphertext:cipher,
-        dataToEncryptHash:digest,
-        unifiedAccessControlConditions: accessControlConditions,
-        authContext: authContext,
-        chain: litChain,
-      });
-      client.disconnect();
-      console.log(decryptedResponse);
-      const decoder = new TextDecoder('utf-8');
-      const text=decoder.decode(decryptedResponse.decryptedData);
-      console.log("Decrypted Text:",text);
-      return text;
-    } catch (err) {
-      console.log("Error:", err);
-      throw new Error(err?.message || "Failed to store key securely via LIT ");
-    }
-   }
 
    static async test(){
     console.log("Testing...");
