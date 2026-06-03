@@ -27,10 +27,10 @@ sequenceDiagram
     Note over User, Blockchain: 📤 UPLOAD FLOW
     User->>User: Generate AES Key & Encrypt File
     User->>LIT: Securely store AES Key (Shamir's Secret Sharing/DKG)
-    LIT-->>User: Return Key ID / Access Condition Hash
+    LIT-->>User: Return Keycipher / Access Condition Hash
     User->>IPFS: Upload Encrypted File
     IPFS-->>User: Return IPFS CID
-    User->>Blockchain: Store Metadata (IPFS CID, Key ID, Access Conditions)
+    User->>Blockchain: Store Metadata (IPFS CID, KeyCipher, Access Conditions)
     Blockchain-->>User: Transaction Confirmed
 
     Note over User, Blockchain: 📥 RETRIEVAL FLOW
