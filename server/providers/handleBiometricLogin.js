@@ -1,6 +1,5 @@
 'use server'
 import { signIn } from "@/auth";
-import { truncates } from "bcryptjs";
 
 export const handleBiometric = async(authResp,email) => {
  try{
