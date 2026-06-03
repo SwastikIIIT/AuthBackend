@@ -23,6 +23,8 @@ import Table from "./web3/Table";
 import blockchain from "@/services/blockchain";
 import { deleteFileData, uploadedFileInfo, uploadToIPFS } from "@/server/web3.api";
 import FileLayout from "./web3/FileLayout";
+import KeyManager from "@/services/KeyManager";
+import { createWalletClient, custom } from "viem";
 import PromptScreen from "./web3/PromptScreen";
 import { Button } from "./ui/button";
 
@@ -68,6 +70,7 @@ const Vault = () => {
         const result = await blockchain.connectToWeb3();
         console.log("Result:",result);
         const fileMetadata=await uploadedFileInfo();
+        console.log("File Metadata:",fileMetadata);
         if (result.success) {
           setWeb3Info(result);
           setHistory(result.history);
@@ -129,9 +132,21 @@ const Vault = () => {
     setIsLoading(true);
     try {
       // setStep('UPLOAD_BLOCKCHAIN');
-      const result = await uploadToIPFS(web3Info.account,web3Info.chainId,file);
+      const result = await uploadToIPFS(file);
       console.log("Result from IPFS upload:", result);
-      await blockchain.saveToBlockchain(result.cid,result.cipher,result.digest,result.metaInfo.fileDBId);
+      
+      // Encrypt Share 3 with Wallet Signature before pushing to blockchain
+      const walletClient = createWalletClient({ transport: custom(window.ethereum) });
+      const kekBuffer = await KeyManager.deriveRecoveryKEK(walletClient, web3Info.account);
+      const encryptedShare3Obj = KeyManager.encryptRecoveryShare(result.share3, kekBuffer);
+
+      await blockchain.saveToBlockchain(
+          result.cid, 
+          encryptedShare3Obj.encryptedData.toString("hex"),
+          encryptedShare3Obj.iv, 
+          encryptedShare3Obj.authTag, 
+          result.metaInfo.fileDBId
+      );
       
 
       toast.success("Success", { description: result?.message });

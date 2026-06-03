@@ -1,5 +1,5 @@
 "use server";
-import { decryptAESKeyWithLit, encryptAesKeywithLit } from "@/helper/Lit";
+import KeyManager from "@/services/KeyManager";
 import { getCookies } from "./api";
 import Encryption from "@/services/encryption";
 import { auth } from "@/auth";
@@ -31,23 +31,50 @@ import { auth } from "@/auth";
  *   digest:string
  * }>}
  */
-export const uploadToIPFS=async (address,chainId,file) => {
+export const uploadToIPFS=async (file) => {
   try {
     const cookie = await getCookies();
-    // 1. Key Generation
+    //1. Key Generation
     const key=Encryption.generateAES();
     console.log("Key:",key);
-    // 2. File Encryption (Symmetric)
+
+    //2. File Encryption (Symmetric)
     const fileBuffer=Buffer.from(await file.arrayBuffer());
     const { encryptedData,iv,authTag }=Encryption.encryptWithAES(fileBuffer, key);
     const encryptedFile=new File([encryptedData], file.name, {type: "application/octet-stream"});
+    
+    //3.1 Split AES key into 3 shares
+    const { shares } = await KeyManager.generateAndSplitKey(key);
+    const [share1, share2, share3] = shares;
 
+    //3.2 Share1 directly to IPFS
+    const share1Blob=new Blob([share1],{type:"text/plain"});
+    const share1FormData=new FormData();
+    share1FormData.append('file',share1Blob,"share1.txt");
+    share1FormData.append("network", "public");
+
+
+    const pinataRes = await fetch("https://uploads.pinata.cloud/v3/files", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`, 
+      },
+      body: share1FormData,
+    });
+
+    const pinataResData = await pinataRes.json();
+    console.log("Pinata Response:",pinataResData);
+    if(!pinataRes.ok) throw new Error(pinataResData.error);
+    const share1CID=pinataResData.data.cid;
+  
     const formData = new FormData();
-    formData.append("doc", encryptedFile); 
-    formData.append("iv", iv); 
-    formData.append("authTag", authTag); 
+    formData.append("doc", encryptedFile);
+    formData.append("iv", iv);
+    formData.append("authTag", authTag);
+    formData.append("share2", share2);
+    formData.append("share1", share1CID);
 
-    // 3. Upload encryptedFile to IPFS
+    //3.2 Upload encryptedFile to IPFS
     const result = await fetch(`${process.env.BACKEND_URL}/api/web3/ipfs`, {
       method: "POST",
       headers: {
@@ -55,20 +82,23 @@ export const uploadToIPFS=async (address,chainId,file) => {
       },
       body: formData,
     });
+
     const data = await result.json();
     if (!result.ok) throw new Error(result.error);
 
     const cid=result.headers.get("IPFS-CID");
-    // 4. Encrypt AES key via Lit (Like Shamir-Secret-Sharing)
-    const encryptedAES = await encryptAesKeywithLit(key,address,chainId); 
+    console.log("Shares:",{share1,share2,share3});
 
     return {
       success:true,
       message: data?.message,
-      metaInfo:data.uploadedFile,
+      metaInfo: {
+        ...data.uploadedFile,
+        share2
+      },
       cid,
-      cipher: encryptedAES?.litResponse?.ciphertext,
-      digest: encryptedAES?.litResponse?.dataToEncryptHash,
+      share1,
+      share3
     };
   } catch (err) {
     console.error("Error while uploading file:", err);
@@ -95,7 +125,6 @@ export const uploadedFileInfo = async()=>{
       });
       if(result.status===204) return [];
       const data=await result.json();
-    
       return data.metaDatas;
   }
   catch(err)

@@ -137,16 +137,17 @@ class Blockchain {
   /**
    * Saving data on blockchain via smartContract
    * @param {string} cid 
-   * @param {string} cipher 
-   * @param {string} digest 
+   * @param {string} share3Data 
+   * @param {string} iv 
+   * @param {string} authTag 
    * @param {string} fileDBId 
    * @returns {Promise<Boolean>}
    */
-  async saveToBlockchain(cid,cipher,digest,fileDBId){
+  async saveToBlockchain(cid, share3Data, iv, authTag, fileDBId){
       try{
           if(!this.signer) await this.connectToWeb3();
           const vaultContract=new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,VaultABI.abi,this.signer);
-          const tx=await vaultContract.addFile(cid,cipher,digest,fileDBId);
+          const tx=await vaultContract.addFile(cid, share3Data, iv, authTag, fileDBId);
           const receipt=await tx.wait();
           console.log("Transaction Hash:",receipt.hash);
           return true;
@@ -188,9 +189,9 @@ class Blockchain {
        if (!fileDBId) throw new Error("fileDBId is missing!");
 
        const vaultContract=new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, VaultABI.abi, this.signer);
-       const [cid,cipher,digest]=await vaultContract.getFile(fileDBId);
+       const [cid, share3Data, iv, authTag]=await vaultContract.getFile(fileDBId);
   
-       return {cid,cipher,digest};
+       return {cid, share3Data, iv, authTag};
     }
     catch (err) {
       console.log('Error getting single file:', err);
